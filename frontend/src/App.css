@@ -1,0 +1,91 @@
+*{
+    font-family: cursive;
+    
+}
+::-webkit-scrollbar{
+    display: none;
+}
+
+.classes{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px;
+}
+.classes button{
+    width: 200px;
+    min-width: 360px;
+    /* margin: 20px; */
+}
+
+.individual{
+    border: 2px solid rgb(73, 70, 70);
+    border-radius: 20px;
+    width: 25vw;
+    margin: 19px 25px;
+    justify-content: space-evenly;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    min-width: 300px;
+    background: rgb(204, 213, 205);
+}
+.individual h2{
+    display: inline;
+}
+
+.indetail{
+    margin-left: 30px;
+}
+
+.inhstack{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.adminlogin{
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.paymentform{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20vh;
+}
+
+.paymentform input{
+    background: #eae8e8;
+}
+
+.studentform input {
+    background: #eae8e8;
+}
+
+.adminfirstpage button{
+    width: 33%;
+    min-width:360px
+}
+
+input , textarea{
+    font-family: fangsong;
+}
+
+.teachers{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    row-gap: 2px;
+    column-gap: 10px;
+    align-content: flex-start;
+}
+.official{
+    height: 220px;
+    border-radius: 50%;
+}
