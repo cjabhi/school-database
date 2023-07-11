@@ -29,7 +29,7 @@ const valid = sessionStorage.getItem("value");
     const studentdata = { name, standard, rollno, fathersname, mothersname, contactno, address , feespaid };
     try {
 
-      const response = await fetch("http://localhost:5000", {
+      const response = await fetch("https://school-database.onrender.com", {
         method: "POST",
         body: JSON.stringify(studentdata),
         headers: {

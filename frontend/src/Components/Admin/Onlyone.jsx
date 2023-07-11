@@ -26,7 +26,7 @@ const Onlyone = () => {
   async function getdata() {
     try {
       // const id = para.id;
-      const response = await fetch(`http://localhost:5000/${para.id}`);
+      const response = await fetch(`https://school-database.onrender.com/${para.id}`);
       // setData(response.json());
       const result = await response.json();
 
@@ -52,7 +52,7 @@ console.log(para.id);
 
 async function deletestudent(){
   try{
-      const response = await fetch(`http://localhost:5000/${para.id}` , {
+      const response = await fetch(`https://school-database.onrender.com/${para.id}` , {
           method:"DELETE"
       })
       const result = response.json();
@@ -89,7 +89,7 @@ async function update(e) {
   const studentdata = { name, standard, rollno, fathersname, mothersname, address, contactno };
   try {
       console.log(JSON.stringify(studentdata))
-    const response = await fetch(`http://localhost:5000/${para.id}`, {
+    const response = await fetch(`https://school-database.onrender.com/${para.id}`, {
       method: "PATCH",
       body: JSON.stringify(studentdata),
       headers: {

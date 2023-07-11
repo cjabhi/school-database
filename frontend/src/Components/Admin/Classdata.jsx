@@ -15,7 +15,7 @@ const Classdata = () => {
         try{
             const std = it.i;
             
-            const response = await fetch(`http://localhost:5000/class/${std}`);
+            const response = await fetch(`https://school-database.onrender.com/class/${std}`);
             // setData(response.json());
             const result = await response.json();
             if(!response.ok)
