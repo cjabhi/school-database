@@ -1,4 +1,4 @@
-import { VStack, Input, Button, InputGroup, InputLeftAddon } from '@chakra-ui/react'
+import { VStack, Input, Button, InputGroup, InputLeftAddon, Spinner } from '@chakra-ui/react'
 import {
   Alert,
   AlertIcon,
@@ -18,17 +18,18 @@ const Add_student = () => {
   const [fathersname, setFathersname] = useState("");
   const [status, setStatus] = useState("");
   const navigate = useNavigate();
+  const [fetching , setFetching] = useState(false);
 
-const valid = sessionStorage.getItem("value");
-  
+  const valid = sessionStorage.getItem("value");
+
 
 
   const submithandler = async (e) => {
     e.preventDefault();
     const feespaid = 0;
-    const studentdata = { name, standard, rollno, fathersname, mothersname, contactno, address , feespaid };
+    const studentdata = { name, standard, rollno, fathersname, mothersname, contactno, address, feespaid };
     try {
-
+        setFetching(true);
       const response = await fetch("https://school-database.onrender.com", {
         method: "POST",
         body: JSON.stringify(studentdata),
@@ -41,12 +42,14 @@ const valid = sessionStorage.getItem("value");
         console.log(result.error);
         alert(result.error);
         setStatus(result.error);
+        setFetching(false);
         setTimeout(() => {
           setStatus("");
         }, 5000);
       }
       else if (response.ok) {
         // alert("done")
+        setFetching(false);
         setStatus("Student added successfully")
         setTimeout(() => {
           setStatus("");
@@ -63,26 +66,28 @@ const valid = sessionStorage.getItem("value");
       alert(err)
     }
   }
-  useEffect(()=>{
-    if(sessionStorage.getItem('value')==="true"){
-      
+  useEffect(() => {
+    if (sessionStorage.getItem('value') === "true") {
+
     }
-    else{
+    else {
       navigate('/login')
     }
   })
 
   return (
     <>{
-      status!=""?
-      <Alert >
-        <AlertIcon />
-        <AlertTitle>{status}</AlertTitle>
-        {/* <AlertDescription>Your Chakra experience may be degraded.</AlertDescription> */}
-      </Alert>
-      : ""
+      status != "" ?
+        <Alert >
+          <AlertIcon />
+          <AlertTitle>{status}</AlertTitle>
+          {/* <AlertDescription>Your Chakra experience may be degraded.</AlertDescription> */}
+        </Alert>
+        : ""
     }
-      <form onSubmit={submithandler} className='studentform' >
+    {
+      fetching ? ( <Spinner position={'absolute'} top={'45vh'} left={'48vw'} /> ) : (
+        <form onSubmit={submithandler} className='studentform' >
         <VStack rowGap={"3"} width={"50vw"} margin={"auto"} alignItems={"flex-start"} minWidth={"340px"}>
           <label htmlFor="name">Name</label>
           <Input placeholder='name'
@@ -91,7 +96,7 @@ const valid = sessionStorage.getItem("value");
             required
             onChange={(e) => { setName(e.target.value) }}
             value={name}
-          />
+            />
           <label htmlFor="class">Class</label>
           <Input placeholder='class'
             name='class'
@@ -99,7 +104,7 @@ const valid = sessionStorage.getItem("value");
             required
             onChange={(e) => { setStandard(e.target.value) }}
             value={standard}
-          />
+            />
           <label htmlFor="rollno">Roll no</label>
           <Input placeholder='roll no'
             name='rollno'
@@ -107,7 +112,7 @@ const valid = sessionStorage.getItem("value");
             required
             onChange={(e) => { setRollno(e.target.value) }}
             value={rollno}
-          />
+            />
           <label htmlFor='fathersname'>Father's Name</label>
           <Input
             name='fathersname'
@@ -142,10 +147,12 @@ const valid = sessionStorage.getItem("value");
             required
             onChange={(e) => { setAddress(e.target.value) }}
             value={address}
-          />
+            />
           <Button colorScheme='green' type='submit' >Add</Button>
         </VStack>
       </form>
+            )
+          }
     </>
   )
 }

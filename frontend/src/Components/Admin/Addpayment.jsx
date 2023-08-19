@@ -1,4 +1,4 @@
-import { Button, Input, InputGroup, InputLeftAddon, InputLeftElement, VStack } from '@chakra-ui/react'
+import { Button, Input, InputGroup, InputLeftAddon , VStack , Spinner } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import {
@@ -14,6 +14,7 @@ const Addpayment = () => {
   const [rollno , setRollno] = useState("");
   const [feespaid , setFeespaid] = useState("");
   const [status, setStatus] = useState("");
+  const [fetching , setFetching] = useState(false);
 
     const navigate = useNavigate();
 
@@ -21,8 +22,9 @@ const Addpayment = () => {
       e.preventDefault();
   const studentdata = { name, standard, rollno, feespaid };
   try {
+    setFetching(true);
       console.log(JSON.stringify(studentdata))
-    const response = await fetch(`http://localhost:5000/amount/6789`, {
+    const response = await fetch(`https://school-database.onrender.com/amount/6789`, {
       method: "PATCH",
       body: JSON.stringify(studentdata),
       headers: {
@@ -31,6 +33,7 @@ const Addpayment = () => {
     });
     const result = await response.json();
     if (!response.ok) {
+      setFetching(false);
       console.log(result.error);
       alert(result.error);
       setStatus(result.error);
@@ -39,7 +42,7 @@ const Addpayment = () => {
         }, 5000);
     }
     else if (response.ok) {
-
+      setFetching(false);
       setName("");
       setRollno("");
       setStandard("");
@@ -50,6 +53,7 @@ const Addpayment = () => {
         }, 5000);
     }
   } catch (err) {
+    setFetching(false);
     alert(err)
   }
       }
@@ -73,8 +77,10 @@ const Addpayment = () => {
       </Alert>
       : ""
     }
+  {
+    fetching ? (<Spinner position={'absolute'} top={'45vh'} left={'48vw'} />) : (
 
-    <div>
+      <div>
       <form onSubmit={update} className='paymentform' >
         <VStack alignItems={'flex-start'} width={"50vw"} minWidth={'350px'} >
           <label htmlFor='name'>Name</label>
@@ -101,12 +107,14 @@ const Addpayment = () => {
               isRequired={true}
               onChange={(e) => { setFeespaid(e.target.value) }}
               value={feespaid}
-            />
+              />
           </InputGroup>
           <Button type='submit'>Submit</Button>
         </VStack>
       </form>
     </div>
+              )
+            }
               </>
   )
 }

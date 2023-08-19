@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Component } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { VStack, Input, Textarea, HStack, Button , Box } from '@chakra-ui/react'
+import { VStack, Input, Textarea, HStack, Button , Box , Spinner } from '@chakra-ui/react'
 import {
   Alert,
   AlertIcon,
@@ -22,10 +22,12 @@ const Onlyone = () => {
   const [feespaid , setFeespaid] = useState(10);
   const [data, setData] = useState([])
   const [status, setStatus] = useState("");
+  const [fetching , setFetching] = useState(false);
   var student = {};
   async function getdata() {
     try {
       // const id = para.id;
+      setFetching(true);
       const response = await fetch(`https://school-database.onrender.com/${para.id}`);
       // setData(response.json());
       const result = await response.json();
@@ -42,7 +44,9 @@ const Onlyone = () => {
       setContactno(student.contactno);
       setFeespaid(student.feespaid)
       setAddress(student.address)
+      setFetching(false);
     }catch (error) {
+      setFetching(false);
     alert(error)
   }
 }
@@ -52,16 +56,19 @@ console.log(para.id);
 
 async function deletestudent(){
   try{
+    setFetching(true);
       const response = await fetch(`https://school-database.onrender.com/${para.id}` , {
           method:"DELETE"
       })
       const result = response.json();
+      setFetching(false);
       alert("deleted")
       setStatus("Student deleted from the database successfully");
         setTimeout(() => {
           setStatus("");
         }, 5000);
   }catch(err){
+    setFetching(false);
       alert(err)
       setStatus(err);
         setTimeout(() => {
@@ -88,6 +95,7 @@ async function update(e) {
   e.preventDefault();
   const studentdata = { name, standard, rollno, fathersname, mothersname, address, contactno };
   try {
+    setFetching(true);
       console.log(JSON.stringify(studentdata))
     const response = await fetch(`https://school-database.onrender.com/${para.id}`, {
       method: "PATCH",
@@ -98,6 +106,7 @@ async function update(e) {
     });
     const result = await response.json();
     if (!response.ok) {
+      setFetching(false);
       console.log(result.error);
       alert(result.error);
       setStatus(result.error);
@@ -107,6 +116,7 @@ async function update(e) {
     }
     
     else if (response.ok) {
+      setFetching(false);
       setStatus("Student updated in the database successfully");
       setTimeout(() => {
         setStatus("");
@@ -114,6 +124,7 @@ async function update(e) {
 
     }
   } catch (err) {
+    setFetching(false);
     alert(err)
   }
 }
@@ -142,6 +153,8 @@ return (
       : ""
     }
 
+{
+  fetching ? (<Spinner position={'absolute'} top={'45vh'} left={'48vw'} />) : (
 
   <form onSubmit={update}>
 
@@ -151,19 +164,19 @@ return (
         onChange={(e) => { setName(e.target.value) }}
         name='name' id='name'
         value={name}
-      />
+        />
       <label htmlFor='class'>Standard</label>
       <Input
         onChange={(e) => { setStandard(e.target.value) }}
         name='class' id='class'
         value={standard}
-      />
+        />
       <label htmlFor='rollno'>Roll-No</label>
       <Input
         onChange={(e) => { setRollno(e.target.value) }}
         name='rollno' id='rollno'
         value={rollno}
-      />
+        />
       <label htmlFor='father'>Father's Name</label>
       <Input
         onChange={(e) => { setFathersname(e.target.value) }}
@@ -197,6 +210,8 @@ return (
     </VStack>
     
   </form>
+        )
+      }
         </>
 )
 }
